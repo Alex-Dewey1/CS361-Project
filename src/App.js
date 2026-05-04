@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { getEntries, addEntry, deleteEntry } from './data/entryService';
+import EntryForm from './components/EntryForm';
+import EntryList from './components/EntryList';
+import StatsDashboard from './components/StatsDashboard';
 
 function App() {
+  // Initialize state with data from service
+  const [entries, setEntries] = useState(getEntries());
+
+  const handleAdd = (newEntry) => {
+    addEntry(newEntry);
+    setEntries(getEntries()); // Refresh state
+  };
+
+  const handleDelete = (id) => {
+    deleteEntry(id);
+    setEntries(getEntries()); // Refresh state
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Calorie Tracker</h1>
+      <StatsDashboard entries={entries} />
+      <EntryForm onAdd={handleAdd} />
+      <EntryList entries={entries} onDelete={handleDelete} />
     </div>
   );
 }
